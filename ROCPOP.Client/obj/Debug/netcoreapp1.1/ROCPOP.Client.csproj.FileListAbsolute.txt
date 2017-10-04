@@ -1,0 +1,10 @@
+C:\Dev\ROCPOP\ROCPOP.Client\bin\Debug\netcoreapp1.1\ROCPOP.Client.deps.json
+C:\Dev\ROCPOP\ROCPOP.Client\bin\Debug\netcoreapp1.1\ROCPOP.Client.runtimeconfig.json
+C:\Dev\ROCPOP\ROCPOP.Client\bin\Debug\netcoreapp1.1\ROCPOP.Client.runtimeconfig.dev.json
+C:\Dev\ROCPOP\ROCPOP.Client\bin\Debug\netcoreapp1.1\ROCPOP.Client.dll
+C:\Dev\ROCPOP\ROCPOP.Client\bin\Debug\netcoreapp1.1\ROCPOP.Client.pdb
+C:\Dev\ROCPOP\ROCPOP.Client\obj\Debug\netcoreapp1.1\ROCPOP.Client.csprojResolveAssemblyReference.cache
+C:\Dev\ROCPOP\ROCPOP.Client\obj\Debug\netcoreapp1.1\ROCPOP.Client.csproj.CoreCompileInputs.cache
+C:\Dev\ROCPOP\ROCPOP.Client\obj\Debug\netcoreapp1.1\ROCPOP.Client.AssemblyInfo.cs
+C:\Dev\ROCPOP\ROCPOP.Client\obj\Debug\netcoreapp1.1\ROCPOP.Client.dll
+C:\Dev\ROCPOP\ROCPOP.Client\obj\Debug\netcoreapp1.1\ROCPOP.Client.pdb

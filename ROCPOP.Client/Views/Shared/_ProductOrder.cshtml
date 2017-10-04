@@ -1,0 +1,58 @@
+@model ROCPOP.Client.Models.ViewModels.ProductViewModel
+@{ 
+    Layout = null;
+}
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+<div id="ProdId" data-prod-id="@Model.Id" data-prod-name="@Model.Name" class="modal-body">
+    @Html.Hidden("ProdSize")
+    @Html.Hidden("ProdQty")
+    <div class="row">
+        <div class="col-md-6">
+            <div class="main-image">
+                <div class="main-image-container">
+                    <img src="~/images/freshpopcorn_260.jpg" />
+                </div>
+            </div>
+            <div>
+                <div class="col-xs-3">
+                    <img src="~/organik_theme/images/shop/shop_100x100.jpg" />
+                </div>
+                <div class="col-xs-3">
+                    <img src="~/organik_theme/images/shop/shop_100x100.jpg" />
+                </div>
+                <div class="col-xs-3">
+                    <img src="~/organik_theme/images/shop/shop_100x100.jpg" />
+                </div>
+                <div class="col-xs-3">
+                    <img src="~/organik_theme/images/shop/shop_100x100.jpg" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6" style="margin-bottom:30px">
+            <h4>@Model.Name</h4>
+            <p class="body-text">
+                Picture yourself in a kaleidoscope of flavor. Here, sea salt and cracked black pepper skies rain crunchy kernels that bring taste buds to attention! Only the Sergeant can call order to the diamond-bright smiles ahead!
+            </p>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Choose a Size:</label>
+                    <select class="form-control prod-size">
+                        <option data-size="SM" value="@Model.PriceSmall">Small - $@Model.PriceSmall</option>
+                        <option data-size="MD" value="@Model.PriceMedium">Medium - $@Model.PriceMedium</option>
+                        <option data-size="LG" value="@Model.PriceLarge">Large - $@Model.PriceLarge</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label>Enter Qty:</label>
+                    <input name="Qty" class="form-control prod-qty" type="number" min="1" value="1"/>
+                </div>
+            </div>
+        </div>
+        <h5 style="position: absolute;bottom: 6px; right:40px" class="ext-price">$@Model.PriceSmall</h5>
+    </div>
+</div>
+<div class="modal-footer">
+    <button id="AddToCart" type="button" class="btn btn-success" data-dismiss="modal">Add To Cart</button>
+</div>

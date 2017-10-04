@@ -1,0 +1,162 @@
+﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ROC CITY POPCORN</title>
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/organik_theme/css/ionicons.min.css" rel="stylesheet" />
+    <link href="~/organik_theme/css/owl.carousel.css" rel="stylesheet" />
+    <link href="~/organik_theme/css/owl.theme.css" rel="stylesheet" />
+    @*<link href="~/organik_theme/css/prettyPhoto.css" rel="stylesheet" />*@
+    <link href="~/organik_theme/css/settings.css" rel="stylesheet" />
+    <link href="~/organik_theme/css/style.css" rel="stylesheet" />
+    <link href="~/css/Override.css" rel="stylesheet" />
+    <link href="//fonts.googleapis.com/css?family=Great+Vibes%7CLato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet" />
+    @*@Html.Raw(JavaScriptSnippet.FullScript)*@
+</head>
+<body>
+    @*<nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">ROCPOP.Client</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>*@
+    @Html.Partial("Topbar")
+    <div class="site">
+        @Html.Partial("Nav_Mobile")
+        @Html.Partial("Nav")
+        @Html.Partial("Nav_Mobile2")
+        <div id="main">
+            @RenderBody()          
+        </div>
+
+        @Html.Partial("Footer")
+    </div>
+
+
+    <div id="ProductModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div id="ThisProduct" class="modal-content">
+                
+            </div>
+        </div>
+    </div>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        @*<script src="~/lib/jquery-migrate/jquery-migrate.js"></script>*@
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="~/lib/knockout/dist/knockout.js"></script>
+        <script src="~/organik_theme/js/imagesloaded.pkgd.min.js"></script>
+        <script src="~/organik_theme/js/core.min.js"></script>
+        <script src="~/organik_theme/js/isotope.pkgd.min.js"></script>
+        <script src="~/organik_theme/js/jquery.prettyPhoto.init.min.js"></script>
+        <script src="~/organik_theme/js/jquery.prettyPhoto.js"></script>
+        @*<script src="~/organik_theme/js/price-slider.js"></script>*@
+        <script src="~/organik_theme/js/slick.min.js"></script>
+        <script src="~/lib/modernizer/modernizr.js"></script>
+        @*<script src="~/organik_theme/js/slider.min.js"></script>*@
+        <script src="~/organik_theme/js/widget.min.js"></script>
+        @*<script src="~/lib/owl-carousel/owl-carousel/owl.carousel.js"></script>*@
+        <script src="~/lib/jquery.countdown/dist/jquery.countdown.js"></script>
+        <script src="~/js/script.js"></script>
+
+        <script src="~/organik_theme/js/jquery.themepunch.tools.min.js"></script>
+        <script src="~/organik_theme/js/jquery.themepunch.revolution.min.js"></script>
+        <script src="~/organik_theme/js/ext/revolution.extension.slideanims.min.js"></script>
+        <script src="~/organik_theme/js/ext/revolution.extension.actions.min.js"></script>
+        <script src="~/organik_theme/js/ext/revolution.extension.layeranimation.min.js"></script>
+        <script src="~/organik_theme/js/ext/revolution.extension.kenburn.min.js"></script>
+        <script src="~/organik_theme/js/ext/revolution.extension.navigation.min.js"></script>
+        <script src="~/organik_theme/js/ext/revolution.extension.migration.min.js"></script>
+        <script src="~/organik_theme/js/ext/revolution.extension.parallax.min.js"></script>
+        @RenderSection("Scripts", required: false)
+        <script>
+
+            //var CartViewModel = function () {
+            //    this.unitPrice = ko.observable(2);
+            //    this.qty = ko.observable(1);
+            //    this.size = ko.observable("SM");
+            //    this.extPrice = ko.computed(function () {
+            //        return this.unitPrice() + " " + this.qty();
+            //    }, this);
+            //};
+            //ko.applyBindings(new CartViewModel());
+            // Get product partial page
+
+            var cart = new Array();
+            $(".prod-info").on("click", function (e) {
+                var prodId = $(this).data().prod;
+                $("#ThisProduct").load("/Product/GetProductOrderForm?id=" + prodId);
+            });
+
+            // Product size
+            $("#ThisProduct").on("click", ".prod-size option", function (e) {
+                // set client side price
+                var unitprice = $(this).val();
+                var qty = $(".prod-qty").val();
+                var extprice = unitprice * qty;
+                $(".ext-price").html("$" + extprice.toFixed(2));
+
+                // set hidden value
+                var size = $(this).data().size;
+                $("#ProdSize").val(size);
+            });
+
+            // Product Qty
+            $("#ThisProduct").on("click", ".prod-qty", function (e) {
+                var unitprice = $(".prod-size").val();
+                var qty = $(this).val();
+                var extprice = unitprice * qty;
+                $(".ext-price").html("$" + extprice.toFixed(2));
+
+                // set hidden value
+                $("#ProdQty").val(qty);
+            });
+
+            //Add to Cart
+            $("#ThisProduct").on("click", "#AddToCart", function (e) {
+                var cartItemCount = $(".mini-cart-icon").data().count + 1;
+                // html not updating work around to update shopping cart number
+                $(".mini-cart").html('<div class="mini-cart-icon" data-count="' + cartItemCount + '"><i class="ion-bag"></i> </div>')
+
+                var prod = $("#ProdId").data();
+                // send info to controller
+                var prodid = prod.prodId;
+                var name = prod.prodName;
+                var size = $("#ProdSize").val();
+                size = size == "" ? "SM" : size;
+                var qty = $("#ProdQty").val();
+                qty = qty == "" ? 1 : qty;
+                var unitprice = $(".prod-size").val();
+
+                cart.push({ "ProdId": prodid, "Name": name, "Size": size, "Price": unitprice, "Qty": qty});
+                // to do: send to controller
+                $.ajax({
+                    url: '/Product/StoreSessionCart',
+                    datatype: 'html',
+                    type: 'POST',
+                    data: { "cart": JSON.stringify(cart) }
+                }).done(function (data) { 
+                    $(".mini-cart-wrap").html(data);
+                });
+            });
+        </script>
+</body>
+</html>

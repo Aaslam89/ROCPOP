@@ -1,0 +1,23 @@
+{
+  "name": "asp.net",
+  "private": true,
+  "dependencies": {
+    "jquery": "3.2.1",
+    "jquery-validation": "1.17.0",
+    "jquery-validation-unobtrusive": "3.2.6",
+    "font-awesome": "Font-Awesome#v4.7.0",
+    "modernizer": "v2010.07.06dev",
+    "owl-carousel": "v1.31",
+    "jquery.countdown": "2.2.0",
+    "slider-revolution": "4.3.7",
+    "jquery-migrate": "3.0.0",
+    "bootstrap": "v3.3.7",
+    "knockout": "v3.4.2"
+  },
+  "resolutions": {
+    "jquery": "3.2.1",
+    "bootstrap": "v4.0.0-beta",
+    "jquery-validation": "1.17.0",
+    "knockout": "3.4.2"
+  }
+}

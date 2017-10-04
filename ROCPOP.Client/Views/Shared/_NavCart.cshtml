@@ -1,0 +1,40 @@
+﻿@model IEnumerable<ROCPOP.Client.Models.ViewModels.SessionCart>
+@{
+    Layout = null;
+ }
+@*<li>
+    <a href="#" class="remove">×</a>
+    <a href="shop-detail.html">
+        <img src="images/shop/shop_100x100.jpg" alt="" />
+        Orange Juice&nbsp;
+    </a>
+    <span class="quantity">1 × $12.00</span>
+</li>*@
+
+
+    <div class="mini-cart">
+        <div class="mini-cart-icon" data-count="@Model.Count()">
+            <i class="ion-bag"></i>
+        </div>
+    </div>
+    <div class="widget-shopping-cart-content">
+        <ul class="cart-list">
+            @foreach (var m in Model)
+            {
+                <li>
+                    <a href="#" class="remove">×</a>
+                    <img src="~/organik_theme/images/shop/shop_100x100.jpg" />
+                    @m.Name - @m.Size&nbsp;
+                    <span class="quantity">@m.Qty × $@m.Price</span>
+                </li>
+            }
+        </ul>
+        <p class="total">
+            <strong>Subtotal:</strong>
+            <span class="amount">$@Model.Sum(x => x.Price * x.Qty)</span>
+        </p>
+        <p class="buttons">
+            @*<a href="cart.html" class="view-cart">View cart</a>*@
+            <a href="/Product/Checkout" class="checkout">Checkout</a>
+        </p>
+    </div>

@@ -1,0 +1,113 @@
+@model IEnumerable<ROCPOP.Client.Models.ViewModels.ProductViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="section pt-12 pb-9" style="padding-top:60px; padding-bottom: 60px">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar">
+                    <div class="widget widget-product-categories">
+                        <h3 class="widget-title">Product Categories</h3>
+                        <ul class="product-categories">
+                            <li><a href="#">All</a> <span class="count">6</span></li>
+                            <li><a href="#">Savory</a> <span class="count">6</span></li>
+                            <li><a href="#">Sweet</a> <span class="count">5</span></li>
+                            <li><a href="#">Best Seller</a> <span class="count">6</span></li>
+                            <li><a href="#">Newest Items</a> <span class="count">6</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="product-grid">
+                    @foreach (var m in Model)
+                    {
+                        <div class="col-md-4 col-sm-6 product-item text-center mb-3">
+                            <div class="product-thumb">
+                                <a>
+                                    <img src="~/images/freshpopcorn_260.jpg" /> @* Name files after product name *@
+                                </a>
+                                <div class="product-action">
+                                        <button data-prod="@m.Id" class="organik-btn small prod-info" data-toggle="modal" data-target="#ProductModal">Click for Info</button>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <a href="shop-detail.html">
+                                    <h2 class="title">@m.Name</h2>
+                                    <span class="price">
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                    @*<div class="col-md-4 col-sm-6 product-item text-center mb-3">
+                        <div class="product-thumb">
+                            <a href="shop-detail.html">
+                                <div class="badges">
+                                    <span class="hot">Hot</span>
+                                    <span class="onsale">Sale!</span>
+                                </div>
+                                <img src="~/images/freshpopcorn_260.jpg" />
+                            </a>
+                            <div class="product-action">
+                                <span class="add-to-cart">
+                                    <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to cart"></a>
+                                </span>
+                                <span class="wishlist">
+                                    <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to wishlist"></a>
+                                </span>
+                                <span class="quickview">
+                                    <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Quickview"></a>
+                                </span>
+                                <span class="compare">
+                                    <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Compare"></a>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <a href="shop-detail.html">
+                                <h2 class="title">Orange Juice</h2>
+                                <span class="price">
+                                    <ins>$12.00</ins>
+                                </span>
+                            </a>
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{ 
+<script>
+    $(document).ready(function () {
+        //var CartViewModel = function () {
+        //    this.unitPrice = ko.observable(2);
+        //    this.qty = ko.observable(1);
+        //    this.size = ko.observable("SM");
+        //    this.extPrice = ko.computed(function () {
+        //        return this.unitPrice() + " " + this.qty();
+        //    }, this);
+        //};
+        //ko.applyBindings(new CartViewModel());
+        if ('@ViewBag.serializedCart') {
+            $.ajax({
+                url: '/Product/StoreSessionCart',
+                datatype: 'html',
+                type: 'POST',
+                data: { "cart": "" }
+            }).done(function (data) {
+                $(".mini-cart-wrap").html(data);
+            });
+        }
+    });
+
+</script>
+
+
+}
