@@ -41,9 +41,9 @@
     </nav>*@
     @Html.Partial("Topbar")
     <div class="site">
-        @Html.Partial("Nav_Mobile")
+        @*@Html.Partial("Nav_Mobile")*@
         @Html.Partial("Nav")
-        @Html.Partial("Nav_Mobile2")
+        @*@Html.Partial("Nav_Mobile2")*@
         <div id="main">
             @RenderBody()          
         </div>
@@ -51,14 +51,67 @@
         @Html.Partial("Footer")
     </div>
 
-
+    @* ----------------------------------------- *@
+    @* ---------------- Modal ------------------ *@
+    @* ----------------------------------------- *@
     <div id="ProductModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div id="ThisProduct" class="modal-content">
-                
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div id="ProdId"  class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="main-image">
+                                <div class="main-image-container">
+                                    <img src="~/images/freshpopcorn_260.jpg" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="col-xs-3">
+                                    <img src="~/organik_theme/images/shop/shop_100x100.jpg" />
+                                </div>
+                                <div class="col-xs-3">
+                                    <img src="~/organik_theme/images/shop/shop_100x100.jpg" />
+                                </div>
+                                <div class="col-xs-3">
+                                    <img src="~/organik_theme/images/shop/shop_100x100.jpg" />
+                                </div>
+                                <div class="col-xs-3">
+                                    <img src="~/organik_theme/images/shop/shop_100x100.jpg" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="margin-bottom:30px">
+                            <h4 data-bind="text: productName"></h4>
+                            <p class="body-text">
+                                Picture yourself in a kaleidoscope of flavor. Here, sea salt and cracked black pepper skies rain crunchy kernels that bring taste buds to attention! Only the Sergeant can call order to the diamond-bright smiles ahead!
+                            </p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Choose a Size:</label>
+                                    <select id="ProdOpt" class="form-control" data-bind="options:  products, selectedOptions: selectedProduct,
+                                       optionsText: 'name',
+                                       optionsValue: 'price',
+                                       value: unitPrice">
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Enter Qty:</label>
+                                    <input id="ProdQTY" class="form-control" type="number" data-bind="value: qty,valueUpdate:'afterkeydown'" min="1" />
+                                </div>
+                            </div>
+                        </div>
+                        <h5 id="ProdPrice" style="position: absolute;bottom: 6px; right:40px" class="ext-price">$<span data-bind="text: extPrice"></span></h5>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="AddToCart" type="button" class="btn btn-success" data-dismiss="modal">Add To Cart</button>
+                </div>
             </div>
         </div>
-    </div>
+        </div>
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         @*<script src="~/lib/jquery-migrate/jquery-migrate.js"></script>*@
         <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -88,8 +141,75 @@
         <script src="~/organik_theme/js/ext/revolution.extension.parallax.min.js"></script>
         @RenderSection("Scripts", required: false)
         <script>
+            $(document).ready(function () {
+                // Navigation js
+                $("ul.main-menu li").on("click", function (e) {
+                    e.preventDefault();
+                    var currTab = $(this);
+                    var text = $(this).children().first().html();
+                    var href;
+                    //var link = $(this).children().first().attr('href');
+                    switch (text) {
+                        case "Home":
+                            href = "/Home/PartialIndex";
+                            break;
+                        case "About":
+                            href = "/Home/About";
+                            break;
+                        case "Products":
+                            href = "/Product/Index";
+                            break;
+                        case "Contact":
+                            href = "/Home/Contact";
+                            break;
+                        default:
+                    }
 
-            //var CartViewModel = function () {
+                    $("#main").load(href);
+
+                    $("ul.main-menu li").removeClass("active");
+                    currTab.addClass("active");
+                });
+            });
+
+
+            // Get the product partial page. partial page gets loaded into modal
+            var cart = new Array();
+            $("#main").on("click", ".prod-info", function (e) {
+                var prodId = $(this).data().prod;
+                //$("#ThisProduct").show();
+                //$("#ThisProduct").load("/Product/GetProductOrderForm?id=" + prodId);
+                $.ajax({
+                    url: "/Product/GetProduct",
+                    datatype: "JSON",
+                    type: "GET",
+                    data: { id: prodId },
+                }).done(function (data) {
+                    productName(data.name);
+                    productId(data.id);
+                    products([]);
+                    //prodcart.productDesc = data.description
+                    addProduct('Small', data.priceSmall);
+                    addProduct('Medium', data.priceMedium);
+                    addProduct('Large', data.priceLarge);
+                    qty(1);
+                    $("#ThisProduct").show();
+                });
+                // to do: set model default
+            });
+
+            
+
+            //$('#ProductModal').on('hidden.bs.modal', function () {
+            //    // do something…
+            //    //console.log("modal closed");
+            //    //ko.cleanNode($("#ProdId")[0]);
+            //    $("#ThisProduct").html("");
+            //    console.log("called");
+            //});
+
+            //// model
+            //var CartViewModel = function() {
             //    this.unitPrice = ko.observable(2);
             //    this.qty = ko.observable(1);
             //    this.size = ko.observable("SM");
@@ -98,65 +218,117 @@
             //    }, this);
             //};
             //ko.applyBindings(new CartViewModel());
-            // Get product partial page
 
-            var cart = new Array();
-            $(".prod-info").on("click", function (e) {
-                var prodId = $(this).data().prod;
-                $("#ThisProduct").load("/Product/GetProductOrderForm?id=" + prodId);
-            });
 
             // Product size
-            $("#ThisProduct").on("click", ".prod-size option", function (e) {
-                // set client side price
-                var unitprice = $(this).val();
-                var qty = $(".prod-qty").val();
-                var extprice = unitprice * qty;
-                $(".ext-price").html("$" + extprice.toFixed(2));
+            //$("#ThisProduct").on("click", ".prod-size option", function (e) {
+            //    // set client side price
+            //    var unitprice = $(this).val();
+            //    var qty = $(".prod-qty").val();
+            //    var extprice = unitprice * qty;
+            //    $(".ext-price").html("$" + extprice.toFixed(2));
 
-                // set hidden value
-                var size = $(this).data().size;
-                $("#ProdSize").val(size);
-            });
+            //    // set hidden value
+            //    var size = $(this).data().size;
+            //    $("#ProdSize").val(size);
+            //});
 
             // Product Qty
-            $("#ThisProduct").on("click", ".prod-qty", function (e) {
-                var unitprice = $(".prod-size").val();
-                var qty = $(this).val();
-                var extprice = unitprice * qty;
-                $(".ext-price").html("$" + extprice.toFixed(2));
+            //$("#ThisProduct").on("click", ".prod-qty", function (e) {
+            //    var unitprice = $(".prod-size").val();
+            //    var qty = $(this).val();
+            //    var extprice = unitprice * qty;
+            //    $(".ext-price").html("$" + extprice.toFixed(2));
 
-                // set hidden value
-                $("#ProdQty").val(qty);
+            //     //set hidden value
+            //    $("#ProdQty").val(qty);
+            //});
+
+            //$("#ThisProduct").on("keyup", ".prod-qty", function (e) {
+
+            //    $(this).val($(this).val().replace(/[^\d].+/, ""));
+            //    if ((e.which < 48 || e.which > 57)) {
+            //        e.preventDefault();
+            //    }
+            //    if ((e.keyCode == 8 || e.keyCode == 46)) {
+            //        $(this).val($(this).val().slice(0, -1));
+            //        console.log('called');
+            //    }
+                //var qtyVal = $(this).val();
+                //var unitprice = $(".prod-size").val();
+                //var qty = $(this).val();
+                //var extprice = unitprice * qty;
+                //$(".ext-price").html("$" + extprice.toFixed(2));
+
+                //// set hidden value
+                //$("#ProdQty").val(qty);
+
+                //if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                //    e.preventDefault();
+                //}
+            //});
+
+        var Product = function (name, price) {
+            this.name = name;
+            this.price = price;
+        };
+
+        // model
+        var prodCart = function CartViewModel() {
+            this.products = ko.observableArray([
+
+            ]),
+            this.addProduct = function (itemSize, itemPrice) {
+                this.products.push({ name: itemSize + " - $" + itemPrice.toFixed(2), price: JSON.stringify(itemPrice) }); //JSON.stringify(itemPrice)
+            }
+            this.selectedProduct = ko.observableArray([]);
+            this.productId = ko.observable();
+            this.productName = ko.observable();
+            this.productDesc = ko.observable();
+            this.unitPrice = ko.observable();
+            this.qty = ko.observable(1);
+            this.size = ko.observable("SM");
+            this.extPrice = ko.computed(function () {
+                var q = Number(this.qty());
+                if (q <= 0) {
+                    this.qty(1);
+                    q = 1;
+                }
+                return parseFloat(this.unitPrice() * q).toFixed(2)
+            }, this).extend({ notify: 'always' });
+        };
+        ko.applyBindings(prodCart);
+
+        //Add to Cart
+        $("#ThisProduct").on("click", "#AddToCart", function (e) {
+            var cartItemCount = $(".mini-cart-icon").data().count + 1;
+            // html not updating work around to update shopping cart number
+            $(".mini-cart").html('<div class="mini-cart-icon" data-count="' + cartItemCount + '"><i class="ion-bag"></i> </div>')
+
+            var prod = $("#ProdId").data();
+            var name = productName();
+            // send info to controller
+            var prodid = productId();
+            var name = productName();
+            var q = qty();
+            var unitprice = $(".prod-size").val();
+            console.log(selectedProduct());
+            var selectedText = $("#ProdOpt option:selected").text()
+            var s = selectedText.substring(0, selectedText.indexOf(' '));
+            var price = $("#ProdOpt").val();
+
+            cart.push({ "ProdId": prodid, "Name": name, "Size": s, "Price": price, "Qty": q });
+            // to do: send to controller
+            $.ajax({
+                url: '/Product/StoreSessionCart',
+                datatype: 'html',
+                type: 'POST',
+                data: { "cart": JSON.stringify(cart) }
+            }).done(function (data) {
+                //console.log(data);
+                $(".mini-cart-wrap").html(data);
             });
-
-            //Add to Cart
-            $("#ThisProduct").on("click", "#AddToCart", function (e) {
-                var cartItemCount = $(".mini-cart-icon").data().count + 1;
-                // html not updating work around to update shopping cart number
-                $(".mini-cart").html('<div class="mini-cart-icon" data-count="' + cartItemCount + '"><i class="ion-bag"></i> </div>')
-
-                var prod = $("#ProdId").data();
-                // send info to controller
-                var prodid = prod.prodId;
-                var name = prod.prodName;
-                var size = $("#ProdSize").val();
-                size = size == "" ? "SM" : size;
-                var qty = $("#ProdQty").val();
-                qty = qty == "" ? 1 : qty;
-                var unitprice = $(".prod-size").val();
-
-                cart.push({ "ProdId": prodid, "Name": name, "Size": size, "Price": unitprice, "Qty": qty});
-                // to do: send to controller
-                $.ajax({
-                    url: '/Product/StoreSessionCart',
-                    datatype: 'html',
-                    type: 'POST',
-                    data: { "cart": JSON.stringify(cart) }
-                }).done(function (data) { 
-                    $(".mini-cart-wrap").html(data);
-                });
-            });
+        });
         </script>
 </body>
 </html>

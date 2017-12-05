@@ -20,7 +20,6 @@ namespace ROCPOP.Client.Controllers
 
         public IActionResult Index()
         {
-
             // List<SessionCart> sessionCart = JsonConvert.DeserializeObject<List<SessionCart>>(cart);
             ViewBag.serializedCart = HttpContext.Session.GetString("Cart");
             
@@ -75,6 +74,75 @@ namespace ROCPOP.Client.Controllers
             };
 
             return View("_ProductOrder", model);
+        }
+
+        public IActionResult GetProduct(int id)
+        {
+            var p = prodService.GetProductById(id);
+            ProductViewModel model = new ProductViewModel()
+            {
+                Id = p.Id
+                ,Name = p.Name
+                ,ProductTypeId = p.ProductTypeId
+                ,ProductTypeName = p.ProductTypeName
+                ,ProductDetailSmall = p.ProductDetailSmall
+                ,ProductDetailMedium = p.ProductDetailMedium
+                ,ProductDetailLarge = p.ProductDetailLarge
+                ,PriceSmall = Math.Round(p.PriceSmall, 2)
+                ,PriceMedium = Math.Round(p.PriceMedium, 2)
+                ,PriceLarge = Math.Round(p.PriceLarge, 2)
+                ,CostSmall = p.CostSmall
+                ,CostMedium = p.CostMedium
+                ,CostLarge = p.CostLarge
+                ,MonthlySalesCount = p.MonthlySalesCount
+                ,Created = p.Created
+            };
+
+            return Json(model);
+        }
+
+        public IActionResult GetNewestItems(bool topFour)
+        {
+            List<ProductViewModel> model = new List<ProductViewModel>();
+            var products = prodService.GetNewestItems(topFour);
+
+            foreach (var p in products)
+            {
+                model.Add(new ProductViewModel() {
+                     Id = p.Id
+                    ,Name = p.Name
+                    ,ProductTypeId = p.ProductTypeId
+                    ,ProductTypeName = p.ProductTypeName
+                    ,ProductDetailSmall = p.ProductDetailSmall
+                    ,ProductDetailMedium = p.ProductDetailMedium
+                    ,ProductDetailLarge = p.ProductDetailLarge
+                    ,PriceSmall = Math.Round(p.PriceSmall, 2)
+                    ,PriceMedium = Math.Round(p.PriceMedium, 2)
+                    ,PriceLarge = Math.Round(p.PriceLarge, 2)
+                    ,CostSmall = p.CostSmall
+                    ,CostMedium = p.CostMedium
+                    ,CostLarge = p.CostLarge
+                    ,MonthlySalesCount = p.MonthlySalesCount
+                    ,Created = p.Created
+                });
+            }
+            return Json(model);
+        }
+
+        public IActionResult GetBestSellers(bool topFour)
+        {
+            List<ProductViewModel> model = new List<ProductViewModel>();
+            var products = prodService.GetNewestItems(topFour);
+
+            foreach (var p in products)
+            {
+                model.Add(new ProductViewModel()
+                {
+                    Id = p.Id,
+                    Name = p.Name
+                });
+            }
+            return Json(model);
         }
 
         [HttpPost]

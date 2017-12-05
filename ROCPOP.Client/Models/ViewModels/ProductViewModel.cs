@@ -26,5 +26,6 @@ namespace ROCPOP.Client.Models.ViewModels
         public decimal CostLarge { get; set; }
         public DateTime Created { get; set; }
         public int MonthlySalesCount { get ; set ; }
+        public string Attribute { get; set; }
     }
 }

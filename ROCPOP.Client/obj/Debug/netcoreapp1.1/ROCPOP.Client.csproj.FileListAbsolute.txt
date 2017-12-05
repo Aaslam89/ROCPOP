@@ -8,3 +8,4 @@ C:\Dev\ROCPOP\ROCPOP.Client\obj\Debug\netcoreapp1.1\ROCPOP.Client.csproj.CoreCom
 C:\Dev\ROCPOP\ROCPOP.Client\obj\Debug\netcoreapp1.1\ROCPOP.Client.AssemblyInfo.cs
 C:\Dev\ROCPOP\ROCPOP.Client\obj\Debug\netcoreapp1.1\ROCPOP.Client.dll
 C:\Dev\ROCPOP\ROCPOP.Client\obj\Debug\netcoreapp1.1\ROCPOP.Client.pdb
+C:\Dev\ROCPOP\ROCPOP.Client\obj\Debug\netcoreapp1.1\ROCPOP.Client.AssemblyInfoInputs.cache

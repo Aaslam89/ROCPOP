@@ -82,7 +82,7 @@ namespace ROCPOP.Client.Models.Repositories.Concrete
                         , ProductDetailLarge = item.productdetail_large
                         , PriceLarge = item.price_large
                         , CostLarge = item.cost_large
-                        , MonthlySalesCount = item.monthsalescount
+                        , MonthlySalesCount = Object.ReferenceEquals(null,item.monthsalescount) ? 0 : item.monthsalescount
                     });
                 }
             }
@@ -135,6 +135,69 @@ group by p.productid, p.producttypeid, p.name, t.name", prodID);
                         , PriceLarge = d.price_large
                         , CostLarge = d.cost_large
                     };
+            }
+            return dto;
+        }
+
+        public List<ProductDTO> GetBestSellers(bool topFour)
+        {
+            List<ProductDTO> dto = new List<ProductDTO>();
+            string sql = "";
+            if (topFour)
+                sql += "select top 4 ";
+            else
+                sql += "select ";
+
+            sql += @"
+      p.productid
+	, sum(qty) as qty
+	, min(p.name) as productName
+from
+    Sales.Orders as o
+join Sales.OrderDetail as d on o.orderid = d.orderid
+
+    join Products.Product as p on d.productid = p.productid
+where p.isactive = 1
+group by p.productid
+order by qty desc";
+
+            using (IDatabase db = Connection)
+            {
+                var d = db.Fetch<dynamic>(sql);
+                foreach (var item in d)
+                {
+                    dto.Add(new ProductDTO() {
+                         Id = item.productid
+                        ,Name = item.productName
+                    });
+                }
+            }
+            return dto;
+        }
+
+        public List<ProductDTO> GetNewestItems(bool topFour)
+        {
+            List<ProductDTO> dto = new List<ProductDTO>();
+            string sql = "";
+            if (topFour)
+                sql += "select top 4 ";
+            else
+                sql += "select ";
+
+            sql += " * from Products.Product where isactive = 1 order by created desc";
+
+            using (IDatabase db = Connection)
+            {
+                var d = db.Fetch<dynamic>(sql);
+                foreach (var item in d)
+                {
+                    dto.Add(new ProductDTO() {
+                        Id = item.productid
+                        ,ProductTypeId = item.producttypeid
+                        ,Name = item.name
+                        ,Created = item.created
+                    });
+                }
             }
             return dto;
         }

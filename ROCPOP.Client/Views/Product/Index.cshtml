@@ -1,6 +1,7 @@
 @model IEnumerable<ROCPOP.Client.Models.ViewModels.ProductViewModel>
 @{
     ViewData["Title"] = "Index";
+    Layout = null;
 }
 
 <div class="section pt-12 pb-9" style="padding-top:60px; padding-bottom: 60px">
@@ -102,6 +103,7 @@
                 type: 'POST',
                 data: { "cart": "" }
             }).done(function (data) {
+                console.log(data);
                 $(".mini-cart-wrap").html(data);
             });
         }

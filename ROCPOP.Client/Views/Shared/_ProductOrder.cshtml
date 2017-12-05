@@ -38,21 +38,56 @@
             <div class="row">
                 <div class="col-md-6">
                     <label>Choose a Size:</label>
-                    <select class="form-control prod-size">
-                        <option data-size="SM" value="@Model.PriceSmall">Small - $@Model.PriceSmall</option>
-                        <option data-size="MD" value="@Model.PriceMedium">Medium - $@Model.PriceMedium</option>
-                        <option data-size="LG" value="@Model.PriceLarge">Large - $@Model.PriceLarge</option>
+                    <select id="ProdOpt" class="form-control"  data-bind="options:  products, selectedOptions: selectedProduct,
+                       optionsText: 'name',
+                       optionsValue: 'price',
+                       value: unitPrice">
                     </select>
                 </div>
                 <div class="col-md-6">
                     <label>Enter Qty:</label>
-                    <input name="Qty" class="form-control prod-qty" type="number" min="1" value="1"/>
+                    <input id="ProdQTY" class="form-control" type="number" data-bind="value: qty,valueUpdate:'afterkeydown'" min="1"/> 
                 </div>
             </div>
         </div>
-        <h5 style="position: absolute;bottom: 6px; right:40px" class="ext-price">$@Model.PriceSmall</h5>
+        <h5 id="ProdPrice" style="position: absolute;bottom: 6px; right:40px" class="ext-price" >$<span data-bind="text: extPrice"></span></h5>
     </div>
 </div>
 <div class="modal-footer">
     <button id="AddToCart" type="button" class="btn btn-success" data-dismiss="modal">Add To Cart</button>
 </div>
+
+
+<script>
+    @*var Product = function (name, price) {
+        this.name = name;
+        this.price = price;
+    };
+
+    // model
+    var CartViewModel = function () {
+        this.products = ko.observableArray([
+            new Product('Small - $@Model.PriceSmall', JSON.stringify(@Model.PriceSmall)),
+            new Product('Medium - $@Model.PriceMedium', JSON.stringify(@Model.PriceMedium)),
+            new Product('Large - $@Model.PriceLarge', JSON.stringify(@Model.PriceLarge))
+        ]),
+        this.selectedProduct = ko.observableArray([]);
+        this.unitPrice = ko.observable();
+        this.qty = ko.observable(1);
+        this.size = ko.observable("SM");
+        this.extPrice = ko.computed(function () {
+            var q = Number(this.qty());
+            if (q <= 0) {
+                this.qty(1);
+                q = 1;
+            }
+            return parseFloat(this.unitPrice() * q).toFixed(2)
+        }, this).extend({ notify: 'always' });;
+    };
+    ko.applyBindings(new CartViewModel());*@
+    @*var s = new CartViewModel();
+    s.addProduct('Small', @Model.PriceSmall);
+    console.log(s.products());
+    s.qty(1);
+    ko.applyBindings(s);*@
+</script>

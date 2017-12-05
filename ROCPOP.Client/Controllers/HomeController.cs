@@ -6,16 +6,56 @@ using Microsoft.AspNetCore.Mvc;
 using ROCPOP.Client.Models;
 using ROCPOP.Client.Services;
 using ROCPOP.Client.Models.ViewModels;
+using ROCPOP.Client.Models.DomainModels.Service;
 
 namespace ROCPOP.Client.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private ProductService prodService;
+        public HomeController()
         {
-            return View();
+            prodService = new ProductService();
         }
 
+        public IActionResult Index()
+        {
+            List<ProductViewModel> model = TopFourProducts();
+            return View(model);
+        }
+
+        public PartialViewResult PartialIndex()
+        {
+            List<ProductViewModel> model = TopFourProducts();
+            return PartialView("Index", model);
+        }
+
+        public List<ProductViewModel> TopFourProducts()
+        {
+            List<ProductViewModel> model = new List<ProductViewModel>();
+            var x = prodService.GetNewestItems(true);
+            var y = prodService.GetBestSellers(true);
+            foreach (var item in x)
+            {
+                model.Add(new ProductViewModel()
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Attribute = "newestItems"
+                });
+            }
+            foreach (var item in y)
+            {
+                model.Add(new ProductViewModel()
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Attribute = "bestSeller"
+                });
+            }
+            return model.Distinct().ToList();
+        }
+        
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -33,7 +73,6 @@ namespace ROCPOP.Client.Controllers
         [HttpPost]
         public IActionResult Contact(ContactForm model)
         {
-
             if (!ModelState.IsValid)
             {
                 return View(model);

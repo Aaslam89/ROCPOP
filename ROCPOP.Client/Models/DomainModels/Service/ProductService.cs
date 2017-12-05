@@ -25,5 +25,15 @@ namespace ROCPOP.Client.Models.DomainModels.Service
             ProductDTO dto = rep.GetProduct(id);
             return dto;
         }
+        public List<ProductDTO> GetNewestItems(bool topFour)
+        {
+            List<ProductDTO> dto = rep.GetNewestItems(topFour);
+            return dto;
+        }
+        public List<ProductDTO> GetBestSellers(bool topFour)
+        {
+            List<ProductDTO> dto = rep.GetBestSellers(topFour);
+            return dto;
+        }
     }
 }

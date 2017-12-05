@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<ROCPOP.Client.Models.ViewModels.ProductViewModel>
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -98,253 +99,35 @@
             <div class="col-sm-12 p-0">
                 <div class="text-center">
                     <ul class="masonry-filter">
-                        <li><a href="#" data-filter="" class="active">All</a></li>
-                        <li><a href="#" data-filter=".savory">Savory</a></li>
-                        <li><a href="#" data-filter=".sweet">Sweet</a></li>
-                        <li><a href="#" data-filter=".bestSeller">Best Seller</a></li>
-                        <li><a href="#" data-filter=".newestItems">Newest Items</a></li>
+                        <li><a data-filter="" class="active">All</a></li>
+                        <li><a data-filter=".bestSeller">Best Seller</a></li>
+                        <li><a data-filter=".newestItems">Newest Items</a></li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="product-grid masonry-grid-post">
-                <div class="col-md-3 col-sm-6 product-item masonry-item text-center newestItems">
-                    <div class="product-thumb">
-                        <a href="shop-detail.html">
-                            <div class="badges">
-                                <span class="hot">Hot</span>
-                                <span class="onsale">Sale!</span>
+            <div class="product-grid masonry-grid-post">  
+                @foreach (var m in Model)
+                {
+                    <div class="col-md-3 col-sm-6 product-item masonry-item text-center @m.Attribute">
+                        <div class="product-thumb">
+                            <a>
+                                <img src="~/images/freshpopcorn_260.jpg" /> @* Name files after product name *@
+                            </a>
+                            <div class="product-action">
+                                <button data-prod="@m.Id" class="organik-btn small prod-info" data-toggle="modal" data-target="#ProductModal">Click for Info</button>
                             </div>
-                            <img src="~/images/freshpopcorn_260.jpg" />
-                        </a>
-                        <div class="product-action">
-                            <span class="add-to-cart">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to cart"></a>
-                            </span>
-                            <span class="wishlist">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to wishlist"></a>
-                            </span>
-                            <span class="quickview">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Quickview"></a>
-                            </span>
-                            <span class="compare">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Compare"></a>
-                            </span>
+                        </div>
+                        <div class="product-info">
+                            <a href="shop-detail.html">
+                                <h2 class="title">@m.Name</h2>
+                                <span class="price">
+                                </span>
+                            </a>
                         </div>
                     </div>
-                    <div class="product-info">
-                        <a href="shop-detail.html">
-                            <h2 class="title">Jalapeno</h2>
-                            <span class="price">
-                                <del>$15.00</del>
-                                <ins>$12.00</ins>
-                            </span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 product-item masonry-item text-center sweet">
-                    <div class="product-thumb">
-                        <a href="shop-detail.html">
-                            <div class="badges">
-                                <span class="hot">Hot</span>
-                            </div>
-                            <img src="~/images/freshpopcorn_260.jpg" />
-                        </a>
-                        <div class="product-action">
-                            <span class="add-to-cart">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to cart"></a>
-                            </span>
-                            <span class="wishlist">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to wishlist"></a>
-                            </span>
-                            <span class="quickview">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Quickview"></a>
-                            </span>
-                            <span class="compare">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Compare"></a>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <a href="shop-detail.html">
-                            <h2 class="title">Sour Cream and Onion</h2>
-                            <span class="price">$9.00</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 product-item masonry-item text-center savory">
-                    <div class="product-thumb">
-                        <a href="shop-detail.html">
-                            <div class="badges">
-                                <span class="hot">Hot</span>
-                            </div>
-                            <img src="~/images/freshpopcorn_260.jpg" />
-                        </a>
-                        <div class="product-action">
-                            <span class="add-to-cart">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to cart"></a>
-                            </span>
-                            <span class="wishlist">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to wishlist"></a>
-                            </span>
-                            <span class="quickview">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Quickview"></a>
-                            </span>
-                            <span class="compare">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Compare"></a>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <a href="shop-detail.html">
-                            <h2 class="title">Blueberry</h2>
-                            <span class="price">$15.00</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 product-item masonry-item text-center sweet">
-                    <div class="product-thumb">
-                        <a href="shop-detail.html">
-                            <img src="~/images/freshpopcorn_260.jpg" />
-                        </a>
-                        <div class="product-action">
-                            <span class="add-to-cart">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to cart"></a>
-                            </span>
-                            <span class="wishlist">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to wishlist"></a>
-                            </span>
-                            <span class="quickview">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Quickview"></a>
-                            </span>
-                            <span class="compare">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Compare"></a>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <a href="shop-detail.html">
-                            <h2 class="title">Passionfruit</h2>
-                            <span class="price">$35.00</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 product-item masonry-item text-center bestSeller">
-                    <div class="product-thumb">
-                        <a href="shop-detail.html">
-                            <div class="badges">
-                                <span class="hot">Hot</span>
-                            </div>
-                            <img src="~/images/freshpopcorn_260.jpg" />
-                        </a>
-                        <div class="product-action">
-                            <span class="add-to-cart">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to cart"></a>
-                            </span>
-                            <span class="wishlist">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to wishlist"></a>
-                            </span>
-                            <span class="quickview">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Quickview"></a>
-                            </span>
-                            <span class="compare">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Compare"></a>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <a href="shop-detail.html">
-                            <h2 class="title">White Cheddar</h2>
-                            <span class="price">$12.00</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 product-item masonry-item text-center bestSeller">
-                    <div class="product-thumb">
-                        <a href="shop-detail.html">
-                            <span class="outofstock"><span>Out</span>of stock</span>
-                            <img src="~/images/freshpopcorn_260.jpg" />
-                        </a>
-                        <div class="product-action">
-                            <span class="add-to-cart">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to cart"></a>
-                            </span>
-                            <span class="wishlist">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to wishlist"></a>
-                            </span>
-                            <span class="quickview">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Quickview"></a>
-                            </span>
-                            <span class="compare">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Compare"></a>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <a href="shop-detail.html">
-                            <h2 class="title">Kettle Corn</h2>
-                            <span class="price">$6.00</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 product-item masonry-item text-center bestSeller">
-                    <div class="product-thumb">
-                        <a href="shop-detail.html">
-                            <img src="~/images/freshpopcorn_260.jpg" />
-                        </a>
-                        <div class="product-action">
-                            <span class="add-to-cart">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to cart"></a>
-                            </span>
-                            <span class="wishlist">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to wishlist"></a>
-                            </span>
-                            <span class="quickview">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Quickview"></a>
-                            </span>
-                            <span class="compare">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Compare"></a>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <a href="shop-detail.html">
-                            <h2 class="title">Himalayan Salt</h2>
-                            <span class="price">$9.00</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 product-item masonry-item text-center sweet">
-                    <div class="product-thumb">
-                        <a href="shop-detail.html">
-                            <div class="badges">
-                                <span class="hot">Hot</span>
-                            </div>
-                            <img src="~/images/freshpopcorn_260.jpg" />
-                        </a>
-                        <div class="product-action">
-                            <span class="add-to-cart">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to cart"></a>
-                            </span>
-                            <span class="wishlist">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to wishlist"></a>
-                            </span>
-                            <span class="quickview">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Quickview"></a>
-                            </span>
-                            <span class="compare">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Compare"></a>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <a href="shop-detail.html">
-                            <h2 class="title">Dark Chocolate</h2>
-                            <span class="price">$9.00</span>
-                        </a>
-                    </div>
-                </div>
+                }
             </div>
         </div>
     </div>
@@ -355,26 +138,52 @@
 @section Scripts{ 
 <script>
     $(document).ready(function () {
-        $('.masonry-grid-post').each(function () {
-            var $this = $(this);
-            var $filter = $this.parents('.site').find('.masonry-filter');
-            $this.imagesLoaded(function () {
-                $this.isotope({
-                    itemSelector: '.masonry-item'
-                });
-            });
+        //$('.masonry-grid-post').each(function () {
+        //    var $this = $(this);
+        //    var $filter = $this.parents('.site').find('.masonry-filter');
+        //    $this.imagesLoaded(function () {
+        //        $this.isotope({
+        //            itemSelector: '.masonry-item'
+        //        });
+        //    });
 
-            $filter.find('a').on("click", function (e) {
+        //    $filter.find('a').on("click", function (e) {
+        //        e.preventDefault();
+        //        $filter.find("a").removeClass('active');
+        //        $(this).addClass('active');
+        //        var data_filter = $(this).data('filter');
+        //        $this.isotope({
+        //            filter: data_filter
+        //        });
+        //    });
+        //});
+            $("body").on("click", ".masonry-filter>li>a", function (e) {
                 e.preventDefault();
-                $filter.find("a").removeClass('active');
+                //$filter.find("a").removeClass('active');
+                $(".masonry-filter>li>a").removeClass("active")
                 $(this).addClass('active');
                 var data_filter = $(this).data('filter');
+                console.log(data_filter);
+                var $this
+                $('.masonry-grid-post').each(function () {
+                    $this = $(this);
+                    var $filter = $this.parents('.site').find('.masonry-filter');
+                    $this.imagesLoaded(function () {
+                        $this.isotope({
+                            itemSelector: '.masonry-item'
+                        });
+                    });
+                });
                 $this.isotope({
                     filter: data_filter
                 });
             });
-        });
     });
 </script>
+<style>
+    .masonry-filter > li {
+        cursor: pointer;
+    }
+</style>
 }
     
