@@ -1,5 +1,5 @@
-﻿using ROCPOP.Client.Models.DomainModels.DTO;
-using ROCPOP.Client.Models.Repositories.Concrete;
+﻿using ROCPOP.Client.Models.Repositories.Concrete;
+using ROCPOP.Client.Models.Repositories.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +34,24 @@ namespace ROCPOP.Client.Models.DomainModels.Service
         {
             List<ProductDTO> dto = rep.GetBestSellers(topFour);
             return dto;
+        }
+
+        public List<ProductCategoryDTO> GetProductCategories()
+        {
+            List<ProductCategoryDTO> dto = rep.GetProductCategories();
+            return dto;
+        }
+
+        public List<ProductDTO> GetProductByCategory(string category)
+        {
+            List<ProductDTO> dto = rep.GetProductByCategory(category);
+            return dto;
+        }
+
+        public List<string> GetCategories()
+        {
+            List<string> categories = rep.GetCategories();
+            return categories;
         }
     }
 }

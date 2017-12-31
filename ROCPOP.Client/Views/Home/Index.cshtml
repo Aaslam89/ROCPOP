@@ -100,7 +100,7 @@
                 <div class="text-center">
                     <ul class="masonry-filter">
                         <li><a data-filter="" class="active">All</a></li>
-                        <li><a data-filter=".bestSeller">Best Seller</a></li>
+                        <li><a data-filter=".bestSeller">Best Sellers</a></li>
                         <li><a data-filter=".newestItems">Newest Items</a></li>
                     </ul>
                 </div>
@@ -110,7 +110,7 @@
             <div class="product-grid masonry-grid-post">  
                 @foreach (var m in Model)
                 {
-                    <div class="col-md-3 col-sm-6 product-item masonry-item text-center @m.Attribute">
+                    <div class="col-md-3 col-sm-6 col-xs-6 product-item masonry-item text-center @m.Attribute">
                         <div class="product-thumb">
                             <a>
                                 <img src="~/images/freshpopcorn_260.jpg" /> @* Name files after product name *@
@@ -163,7 +163,7 @@
                 $(".masonry-filter>li>a").removeClass("active")
                 $(this).addClass('active');
                 var data_filter = $(this).data('filter');
-                console.log(data_filter);
+                //console.log(data_filter);
                 var $this
                 $('.masonry-grid-post').each(function () {
                     $this = $(this);

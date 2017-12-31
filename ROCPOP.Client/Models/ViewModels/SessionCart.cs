@@ -13,6 +13,7 @@ namespace ROCPOP.Client.Models.ViewModels
         public decimal Price { get; set; }
         public int Qty { get; set; }
         public int Count { get; set; }
+        public int Identifier { get; set; }
     }
 }
 

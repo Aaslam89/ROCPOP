@@ -1,17 +1,4 @@
-﻿
-
-<header id="header" class="header header-desktop header-2">
-    @*<div class="top-search">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    <form>
-                        <input type="search" class="top-search-input" name="s" placeholder="What are you looking for?" />
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>*@
+﻿@*<header id="header" class="header header-desktop header-2">
     <div class="container">
         <div class="row">
             <div class="col-md-3">
@@ -23,17 +10,17 @@
                 <div class="header-center">
                     <nav class="menu">
                         <ul class="main-menu">
-                            <li class="active">
-                                <a href="/">Home</a>
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")">
+                                @Html.ActionLink("Home", "Index", "Home")
                             </li>
-                            <li>
-                                <a href="/">About</a>
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "About" ? "active" : "")">
+                                @Html.ActionLink("About", "About", "Home")
                             </li>
-                            <li>
-                                <a href="/">Products</a>
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Products" ? "active" : "")">
+                                @Html.ActionLink("Products", "Products", "Product")
                             </li>
-                            <li>
-                                <a href="/">Contact</a>
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Contact" ? "active" : "")">
+                                @Html.ActionLink("Contact", "Contact", "Home")
                             </li>
                         </ul>
                     </nav>
@@ -57,4 +44,121 @@
             </div>
         </div>
     </div>
-</header>
+</header>*@
+
+
+@*<header id="header" class="header header-desktop header-2">*@
+<div class="container">
+    <div class="row">
+        <nav class="navbar">
+            @*<div class="container-fluid">*@
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header col-md-5">
+                <button type="button" class="navbar-toggle collapsed pull-left" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @*<a class="navbar-brand col-xs-6 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-3 col-md-offset-0 col-lg-6 col-lg-offset-0" href="#">*@
+                <a class="navbar-brand hidden-xs" href="#">
+                    <img class="logo-image" src="images/logo.png" alt="ROC CITY POPCORN Logo" />
+                </a>
+                <a class="navbar-brand visible-xs pull-right" href="#">
+                    <img class="logo-image" src="images/logo.png" alt="ROC CITY POPCORN Logo" />
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse col-md-7" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")">
+                        @Html.ActionLink("Home", "Index", "Home")
+                    </li>
+                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "About" ? "active" : "")">
+                        @Html.ActionLink("About", "About", "Home")
+                    </li>
+                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Products" ? "active" : "")">
+                        @Html.ActionLink("Products", "Products", "Product")
+                    </li>
+                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Contact" ? "active" : "")">
+                        @Html.ActionLink("Contact", "Contact", "Home")
+                    </li>
+                    <li class="visible-xs @(ViewContext.RouteData.Values["Action"].ToString() == "Cart" ? "active" : "")">
+                        @Html.ActionLink("Checkout", "Cart", "Product")
+                    </li>
+                    <li id="SessionCart" class="btn-wrap hidden-xs">
+                        <div class="mini-cart-wrap">
+                            <div class="mini-cart">
+                                <div class="mini-cart-icon" data-count="0">
+                                    <i class="ion-bag"></i>
+                                </div>
+                            </div>
+                            <div class="widget-shopping-cart-content pull-right">
+                                <ul class="cart-list">
+                                    <li>
+                                        Cart is Empty
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+@*</header>*@
+<style>
+    .navbar-header .navbar-toggle .icon-bar {
+        background-color: black;
+    }
+    /*button.navbar-toggle {
+            border-color: black;
+        }*/
+    /*.center-me {
+        margin: 0 auto;
+        text-align: center;
+    }*/
+    .navbar {
+        margin-bottom: 40px;
+        margin-top: 40px;
+    }
+
+    .navbar-nav {
+        font-family: Lato, Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        line-height: 25px;
+        /*letter-spacing: 0em;*/
+        color: #5E5A54;
+        letter-spacing: 0.05em;
+        font-weight: 700;
+        line-height: 1.5;
+        font-size: 14px;
+    }
+
+    .nav > li > a {
+        text-transform: uppercase;
+        padding: 10px 20px
+    }
+    .nav > li > a:hover {
+        background: none;
+    }
+
+    /*#bs-example-navbar-collapse-1 > .nav > li > a {
+        text-transform: uppercase;
+        padding: 10px 10px
+    }*/
+    .mini-cart-icon {
+        font-size: 24px !important;
+        line-height: 1 !important;
+        position:relative;
+        top: 8px;
+        left: 5px;
+    }
+
+    li.active a {
+        color: #5fbd74;
+    }
+</style>

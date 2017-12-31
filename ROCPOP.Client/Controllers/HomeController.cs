@@ -7,6 +7,8 @@ using ROCPOP.Client.Models;
 using ROCPOP.Client.Services;
 using ROCPOP.Client.Models.ViewModels;
 using ROCPOP.Client.Models.DomainModels.Service;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace ROCPOP.Client.Controllers
 {
@@ -20,9 +22,29 @@ namespace ROCPOP.Client.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.serializedCart = HttpContext.Session.GetString("Cart");
+            //if (ViewBag.serializedCart == null)
+            //{
+            //    string[] poop = new string[0];
+            //    ViewBag.serializedCart = poop;
+            //}
             List<ProductViewModel> model = TopFourProducts();
             return View(model);
         }
+
+        //public IActionResult Nav()
+        //{
+        //    List<SessionCart> sessionCart;
+        //    if (HttpContext.Session.GetString("Cart") != null)
+        //    {
+        //        sessionCart = JsonConvert.DeserializeObject<List<SessionCart>>(HttpContext.Session.GetString("Cart"));
+        //    }
+        //    else
+        //    {
+        //        sessionCart = new List<SessionCart>();
+        //    }
+        //    return View("Nav", sessionCart);
+        //}
 
         public PartialViewResult PartialIndex()
         {
@@ -58,14 +80,14 @@ namespace ROCPOP.Client.Controllers
         
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewBag.serializedCart = HttpContext.Session.GetString("Cart");
 
             return View();
         }
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewBag.serializedCart = HttpContext.Session.GetString("Cart");
 
             return View();
         }
@@ -73,6 +95,7 @@ namespace ROCPOP.Client.Controllers
         [HttpPost]
         public IActionResult Contact(ContactForm model)
         {
+            ViewBag.serializedCart = HttpContext.Session.GetString("Cart");
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -92,6 +115,7 @@ namespace ROCPOP.Client.Controllers
 
         public IActionResult Thanks()
         {
+            ViewBag.serializedCart = HttpContext.Session.GetString("Cart");
             ViewData["Message"] = "Your contact page.";
 
             return View();

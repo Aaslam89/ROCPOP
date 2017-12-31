@@ -1,0 +1,22 @@
+@model IEnumerable<ROCPOP.Client.Models.ViewModels.ProductViewModel>
+
+    @foreach (var m in Model)
+    {
+        <div class="col-md-4 col-sm-6 product-item text-center mb-3">
+            <div class="product-thumb">
+                <a>
+                    <img src="~/images/freshpopcorn_260.jpg" /> @* Name files after product name *@
+                </a>
+                <div class="product-action">
+                    <button data-prod="@m.Id" class="organik-btn small prod-info" data-toggle="modal" data-target="#ProductModal">Click for Info</button>
+                </div>
+            </div>
+            <div class="product-info">
+                <a href="shop-detail.html">
+                    <h2 class="title">@m.Name</h2>
+                    <span class="price">
+                    </span>
+                </a>
+            </div>
+        </div>
+    }

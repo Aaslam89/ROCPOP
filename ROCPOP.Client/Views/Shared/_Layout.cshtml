@@ -141,40 +141,20 @@
         <script src="~/organik_theme/js/ext/revolution.extension.parallax.min.js"></script>
         @RenderSection("Scripts", required: false)
         <script>
-            $(document).ready(function () {
-                // Navigation js
-                $("ul.main-menu li").on("click", function (e) {
-                    e.preventDefault();
-                    var currTab = $(this);
-                    var text = $(this).children().first().html();
-                    var href;
-                    //var link = $(this).children().first().attr('href');
-                    switch (text) {
-                        case "Home":
-                            href = "/Home/PartialIndex";
-                            break;
-                        case "About":
-                            href = "/Home/About";
-                            break;
-                        case "Products":
-                            href = "/Product/Index";
-                            break;
-                        case "Contact":
-                            href = "/Home/Contact";
-                            break;
-                        default:
-                    }
-
-                    $("#main").load(href);
-
-                    $("ul.main-menu li").removeClass("active");
-                    currTab.addClass("active");
-                });
-            });
 
 
             // Get the product partial page. partial page gets loaded into modal
             var cart = new Array();
+
+            $.ajax({
+                url: '/Product/GetSessionCart',
+                datatype: 'json',
+                type: 'POST',
+            }).done(function (data) {
+                cart = data;
+            });
+
+            // Get product and show in modal
             $("#main").on("click", ".prod-info", function (e) {
                 var prodId = $(this).data().prod;
                 //$("#ThisProduct").show();
@@ -195,78 +175,8 @@
                     qty(1);
                     $("#ThisProduct").show();
                 });
-                // to do: set model default
             });
 
-            
-
-            //$('#ProductModal').on('hidden.bs.modal', function () {
-            //    // do something…
-            //    //console.log("modal closed");
-            //    //ko.cleanNode($("#ProdId")[0]);
-            //    $("#ThisProduct").html("");
-            //    console.log("called");
-            //});
-
-            //// model
-            //var CartViewModel = function() {
-            //    this.unitPrice = ko.observable(2);
-            //    this.qty = ko.observable(1);
-            //    this.size = ko.observable("SM");
-            //    this.extPrice = ko.computed(function () {
-            //        return this.unitPrice() + " " + this.qty();
-            //    }, this);
-            //};
-            //ko.applyBindings(new CartViewModel());
-
-
-            // Product size
-            //$("#ThisProduct").on("click", ".prod-size option", function (e) {
-            //    // set client side price
-            //    var unitprice = $(this).val();
-            //    var qty = $(".prod-qty").val();
-            //    var extprice = unitprice * qty;
-            //    $(".ext-price").html("$" + extprice.toFixed(2));
-
-            //    // set hidden value
-            //    var size = $(this).data().size;
-            //    $("#ProdSize").val(size);
-            //});
-
-            // Product Qty
-            //$("#ThisProduct").on("click", ".prod-qty", function (e) {
-            //    var unitprice = $(".prod-size").val();
-            //    var qty = $(this).val();
-            //    var extprice = unitprice * qty;
-            //    $(".ext-price").html("$" + extprice.toFixed(2));
-
-            //     //set hidden value
-            //    $("#ProdQty").val(qty);
-            //});
-
-            //$("#ThisProduct").on("keyup", ".prod-qty", function (e) {
-
-            //    $(this).val($(this).val().replace(/[^\d].+/, ""));
-            //    if ((e.which < 48 || e.which > 57)) {
-            //        e.preventDefault();
-            //    }
-            //    if ((e.keyCode == 8 || e.keyCode == 46)) {
-            //        $(this).val($(this).val().slice(0, -1));
-            //        console.log('called');
-            //    }
-                //var qtyVal = $(this).val();
-                //var unitprice = $(".prod-size").val();
-                //var qty = $(this).val();
-                //var extprice = unitprice * qty;
-                //$(".ext-price").html("$" + extprice.toFixed(2));
-
-                //// set hidden value
-                //$("#ProdQty").val(qty);
-
-                //if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                //    e.preventDefault();
-                //}
-            //});
 
         var Product = function (name, price) {
             this.name = name;
@@ -312,7 +222,7 @@
             var name = productName();
             var q = qty();
             var unitprice = $(".prod-size").val();
-            console.log(selectedProduct());
+            //console.log(selectedProduct());
             var selectedText = $("#ProdOpt option:selected").text()
             var s = selectedText.substring(0, selectedText.indexOf(' '));
             var price = $("#ProdOpt").val();
@@ -329,6 +239,21 @@
                 $(".mini-cart-wrap").html(data);
             });
         });
+
+        // get cart and populate drop down cart
+        if ('@ViewBag.serializedCart') {
+        $.ajax({
+            url: '/Product/StoreSessionCart',
+            datatype: 'html',
+            type: 'POST',
+            data: { "cart": "" }
+        }).done(function (data) {
+            //console.log(data);
+            $(".mini-cart-wrap").html(data);
+        });
+        }
+
+           
         </script>
 </body>
 </html>

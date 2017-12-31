@@ -1,0 +1,198 @@
+@model IEnumerable<ROCPOP.Client.Models.ViewModels.SessionCart>
+@{
+    //ViewData["Title"] = "Cart";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="section section-bg-10 pt-11 pb-17">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="page-title text-center">Cart</h2>
+            </div>
+        </div>
+    </div>
+</div>
+@if (Model.Count() > 0)
+{
+    <div class="section pt-7 pb-7">
+        <div class="container" style="margin-top:70px; margin-bottom:70px">
+            <div class="row">
+                <div class="col-md-8">
+                    <table class="table shop-cart">
+                        <tbody>
+                            @foreach (var m in Model)
+                            {
+                                <tr data-index="@m.Identifier" class="cart_item">
+                                    <td class="product-remove">
+                                        <div data-index="@m.Identifier" class="remove">x</div>
+                                    </td>
+                                    <td class="product-thumbnail">
+                                        <a href="shop-detail.html">
+                                            <img src="images/shop/shop_100x100.jpg" alt="">
+                                        </a>
+                                    </td>
+                                    <td class="product-info">
+                                        <a href="shop-detail.html">@m.Name - @m.Size</a>
+                                        <span class="amount">@string.Format("{0:C}", m.Price)</span>
+                                    </td>
+                                    <td class="product-quantity">
+                                        <div class="quantity">
+                                            <input data-index="@m.Identifier" data-price="@m.Price" id="qty-1" min="1" name="number" value="@m.Qty" class="input-text qty text" type="number">
+                                        </div>
+                                    </td>
+                                    <td class="product-subtotal p-@m.Identifier">
+                                        <span class="amount">@string.Format("{0:C}", (m.Price * m.Qty))</span>
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="5" class="actions">
+                                    <a class="btn btn-default btn-lg pull-right" href="/Product/Products"> Continue Shopping</a>@*continue-shopping*@
+                                    @*<input class="update-cart" name="update_cart" value="Update Cart" type="submit">*@
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <div class="cart-totals">
+                        <table>
+                            <tbody>
+                                <tr class="cart-subtotal">
+                                    <th>Subtotal</th>
+                                    <td>@string.Format("{0:C}", Model.Sum(x => x.Price * x.Qty))</td>
+                                </tr>
+                                <tr class="shipping">
+                                    <th>Shipping</th>
+                                    <td>Free Shipping</td>
+                                </tr>
+                                <tr class="order-total">
+                                    <th>Total</th>
+                                    <td><strong>@string.Format("{0:C}", Model.Sum(x => x.Price * x.Qty))</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="proceed-to-checkout">
+                            <a href="/Order/Checkout">Proceed to Checkout</a>
+                        </div>
+                    </div>
+                    @*<div class="coupon-shipping">
+                            <div class="coupon">
+                                <form>
+                                    <input name="coupon_code" class="coupon-code" id="coupon_code" value="" placeholder="Coupon code" type="text">
+                                    <input class="apply-coupon" name="apply_coupon" value="Apply Coupon" type="submit">
+                                </form>
+                            </div>
+                        </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12" style="margin-top:90px; margin-bottom:90px;">
+                <h2 class="page-title text-center" style="color:black">There are not any items in the cart!</h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var prodModel = @Html.Raw(Json.Serialize(Model));
+
+            $(".remove").on("click", function () {
+                var $this = $(this);
+                var $data = $this.data();
+                var $index = $data.index;
+                // remove html
+                $this.parent().parent().remove();
+                // remove item from array
+                prodModel = prodModel.filter(function (obj) {
+                    return obj.identifier !== $index;
+                });
+                // update subtotal
+                var subtotal = 0;
+                for (var i = 0; i < prodModel.length; i++) {
+                    subtotal += prodModel[i].qty * prodModel[i].price;
+                }
+                subtotal = parseFloat(subtotal).toFixed(2)
+                $(".cart-subtotal").html("<th>Subtotal</th><td>$" + subtotal + "</td>");
+                $(".order-total").html("<th>Total</th><td>$" + subtotal + "</td>");
+
+                $.ajax({
+                    url: '/Product/StoreSessionCart',
+                    datatype: 'html',
+                    type: 'POST',
+                    data: { "cart": JSON.stringify(prodModel) }
+                }).done(function (data) {
+                    $(".mini-cart-wrap").html(data);
+                });
+            });
+
+            $(".input-text").on("click", function () {
+                var $this = $(this);
+                var $data = $this.data();
+                var $index = $data.index;
+                var $price = parseFloat($data.price);
+                var $val = parseInt($this.val());
+
+                // set model qty
+                for (var i = 0; i < prodModel.length; i++) {
+                    if (prodModel[i].identifier == $index) {
+                        prodModel[i].qty = $val
+                    }
+                }
+
+                // update line total
+                var newPrice = parseFloat($price * $val).toFixed(2);
+                $(".p-" + $index).html("<span class='amount'>$" + newPrice + "</span>");
+
+                // update subtotal
+                var subtotal = 0;
+                for (var i = 0; i < prodModel.length; i++) {
+                    subtotal += prodModel[i].qty * prodModel[i].price;
+                }
+                subtotal = parseFloat(subtotal).toFixed(2)
+                $(".cart-subtotal").html("<th>Subtotal</th><td>$"+ subtotal +"</td>");
+                $(".order-total").html("<th>Total</th><td>$" + subtotal + "</td>");
+
+                $.ajax({
+                    url: '/Product/StoreSessionCart',
+                    datatype: 'html',
+                    type: 'POST',
+                    data: { "cart": JSON.stringify(prodModel) }
+                }).done(function (data) {
+                    $(".mini-cart-wrap").html(data);
+                });
+            });
+        });
+
+    </script>
+
+}
+<style>
+    .remove {
+        cursor: pointer;
+    }
+    /*color: #5fbd74;*/
+    /*.continue-shopping:hover {
+            background-color: #5fbd74;
+            color: white;
+        }*/
+    .btn-lg {
+        border-radius: 0px;
+        font-family: Lato, Helvetica, Arial,sans-serif;
+        font-size: 13px;
+        letter-spacing: 3px;
+        font-weight: 400;
+        text-transform: uppercase;
+    }
+</style>

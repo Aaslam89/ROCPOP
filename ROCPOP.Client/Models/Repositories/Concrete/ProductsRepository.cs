@@ -1,6 +1,6 @@
 ﻿
 using NPoco;
-using ROCPOP.Client.Models.DomainModels.DTO;
+using ROCPOP.Client.Models.Repositories.DTO;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -69,10 +69,10 @@ namespace ROCPOP.Client.Models.Repositories.Concrete
                 {
                     dto.Add(new ProductDTO() {
                         Id = item.productid
-                        ,ProductTypeId = item.producttypeid
-                        ,Name = item.productname
-                        ,Created = item.create_date
-                        ,ProductTypeName = item.producttypename
+                        , ProductTypeId = item.producttypeid
+                        , Name = item.productname
+                        , Created = item.create_date
+                        , ProductTypeName = item.producttypename
                         , ProductDetailSmall = item.productdetail_small
                         , PriceSmall = item.price_small
                         , CostSmall = item.cost_small
@@ -82,7 +82,7 @@ namespace ROCPOP.Client.Models.Repositories.Concrete
                         , ProductDetailLarge = item.productdetail_large
                         , PriceLarge = item.price_large
                         , CostLarge = item.cost_large
-                        , MonthlySalesCount = Object.ReferenceEquals(null,item.monthsalescount) ? 0 : item.monthsalescount
+                        , MonthlySalesCount = Object.ReferenceEquals(null, item.monthsalescount) ? 0 : item.monthsalescount
                     });
                 }
             }
@@ -118,23 +118,23 @@ group by p.productid, p.producttypeid, p.name, t.name", prodID);
             using (IDatabase db = Connection)
             {
                 var d = db.Single<dynamic>(sql);
-                    dto = new ProductDTO()
-                    {
-                        Id = d.productid
-                        ,ProductTypeId = d.producttypeid
-                        ,Name = d.productname
-                        ,Created = d.create_date
-                        ,ProductTypeName = d.producttypename
-                        , ProductDetailSmall = d.productdetail_small
-                        , PriceSmall = d.price_small
-                        , CostSmall = d.cost_small
-                        , ProductDetailMedium = d.productdetail_medium
-                        , PriceMedium = d.price_medium
-                        , CostMedium = d.cost_medium
-                        , ProductDetailLarge = d.productdetail_large
-                        , PriceLarge = d.price_large
-                        , CostLarge = d.cost_large
-                    };
+                dto = new ProductDTO()
+                {
+                    Id = d.productid
+                    , ProductTypeId = d.producttypeid
+                    , Name = d.productname
+                    , Created = d.create_date
+                    , ProductTypeName = d.producttypename
+                    , ProductDetailSmall = d.productdetail_small
+                    , PriceSmall = d.price_small
+                    , CostSmall = d.cost_small
+                    , ProductDetailMedium = d.productdetail_medium
+                    , PriceMedium = d.price_medium
+                    , CostMedium = d.cost_medium
+                    , ProductDetailLarge = d.productdetail_large
+                    , PriceLarge = d.price_large
+                    , CostLarge = d.cost_large
+                };
             }
             return dto;
         }
@@ -167,8 +167,8 @@ order by qty desc";
                 foreach (var item in d)
                 {
                     dto.Add(new ProductDTO() {
-                         Id = item.productid
-                        ,Name = item.productName
+                        Id = item.productid
+                        , Name = item.productName
                     });
                 }
             }
@@ -193,13 +193,102 @@ order by qty desc";
                 {
                     dto.Add(new ProductDTO() {
                         Id = item.productid
-                        ,ProductTypeId = item.producttypeid
-                        ,Name = item.name
-                        ,Created = item.created
+                        , ProductTypeId = item.producttypeid
+                        , Name = item.name
+                        , Created = item.created
                     });
                 }
             }
             return dto;
         }
+
+        public List<ProductDTO> GetProductByCategory(string category)
+        {
+            List<ProductDTO> dto = new List<ProductDTO>();
+            string sql = String.Format(@"
+select 
+	p.productid
+	, p.[name]
+from
+	Products.Product as p 
+	join Products.ProductType as pp on p.producttypeid = pp.producttypeid
+where
+	p.isactive = 1
+	and pp.[name] = '{0}'", category);
+
+            using (IDatabase db = Connection)
+            {
+                var d = db.Fetch<dynamic>(sql);
+                foreach (var item in d)
+                {
+                    dto.Add(new ProductDTO()
+                    {
+                        Id = item.productid,
+                        Name = item.name,
+                    });
+                }
+            }
+            return dto;
+        }
+
+        public List<ProductCategoryDTO> GetProductCategories()
+        {
+            List<ProductCategoryDTO> dto = new List<ProductCategoryDTO>();
+
+            string sql = String.Format(@"
+select 
+	categoryname = case when pp.[name] is not null then pp.[name] else 'All' end,
+	categorycount = count(pp.name),
+	[rank] = case when pp.[name] is null then 1 else 2 end
+from
+	Products.Product as p 
+	join Products.ProductType as pp on p.producttypeid = pp.producttypeid
+where
+	p.isactive = 1
+group by pp.[name]
+with rollup
+order by [rank], categoryname");
+
+            using (IDatabase db = Connection)
+            {
+                var d = db.Fetch<dynamic>(sql);
+                foreach (var item in d)
+                {
+                    dto.Add(new ProductCategoryDTO()
+                    {
+                        CategoryName = item.categoryname,
+                        CategoryCount = item.categorycount,
+                        Rank = item.rank
+                    });
+                }
+            }
+
+            return dto;
+        }
+
+        public List<string> GetCategories()
+        {
+            List<string> categories = new List<string>();
+            string sql = String.Format(@"
+select 
+	pp.[name]
+from
+	Products.Product as p 
+	join Products.ProductType as pp on p.producttypeid = pp.producttypeid
+where
+	p.isactive = 1
+group by pp.[name]
+");
+            using (IDatabase db = Connection)
+            {
+                var d = db.Fetch<string>(sql);
+                foreach (var item in d)
+                {
+                    categories.Add(item);
+                }
+            }
+            return categories;
+        }
+
     }
 }

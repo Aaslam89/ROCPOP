@@ -7,6 +7,7 @@ using ROCPOP.Client.Models.ViewModels;
 using ROCPOP.Client.Models.DomainModels.Service;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using ROCPOP.Client.Models.Repositories.DTO;
 
 namespace ROCPOP.Client.Controllers
 {
@@ -18,17 +19,18 @@ namespace ROCPOP.Client.Controllers
             prodService = new ProductService();
         }
 
-        public IActionResult Index()
+        public IActionResult Products()
         {
             // List<SessionCart> sessionCart = JsonConvert.DeserializeObject<List<SessionCart>>(cart);
             ViewBag.serializedCart = HttpContext.Session.GetString("Cart");
-            
-            List<ProductViewModel> model = new List<ProductViewModel>();
+
+            ProductCategoryListVM model = new ProductCategoryListVM();
             var products = prodService.GetProducts();
+            var prodCategories = prodService.GetProductCategories();
 
             foreach (var p in products)
             {
-                model.Add(new ProductViewModel() {
+                model.Products.Add(new ProductViewModel() {
                     Id = p.Id
                     , Name = p.Name
                     , ProductTypeId = p.ProductTypeId
@@ -46,8 +48,83 @@ namespace ROCPOP.Client.Controllers
                     , Created = p.Created
                 });
             }
+            int total = prodCategories.First().CategoryCount;
+            foreach (var c in prodCategories)
+            {
+                model.ProductCategories.Add(new ProductCategoryViewModel(){
+                    CategoryName = c.CategoryName,
+                    CategoryCount = c.CategoryCount,
+                    Rank = c.Rank
+                });
+            }
+            model.ProductCategories.Add(new ProductCategoryViewModel()
+            {
+                CategoryName = "Best Sellers",
+                CategoryCount = total,
+            });
+            model.ProductCategories.Add(new ProductCategoryViewModel()
+            {
+                CategoryName = "Newest Items",
+                CategoryCount = total,
+            });
 
             return View(model);
+        }
+
+        public PartialViewResult ProductPartial(string category)
+        {
+            List<ProductDTO> dto = new List<ProductDTO>();
+            List<ProductViewModel> model = new List<ProductViewModel>();
+            List<string> categories = prodService.GetCategories();
+            switch (category)
+            {
+                case "All":
+                    dto = prodService.GetProducts();
+                    break;
+                case "Best Sellers":
+                    dto = prodService.GetBestSellers(false);
+                    break;
+                case "Newest Items":
+                    dto = prodService.GetNewestItems(false);
+                    break;
+                default:
+                    if (categories.Contains(category))
+                        dto = prodService.GetProductByCategory(category);
+                    else
+                        dto = prodService.GetProducts();
+                    break;
+            }
+
+            foreach (var d in dto)
+            {
+                model.Add(new ProductViewModel() {
+                    Id = d.Id,
+                    Name = d.Name
+                });
+            }
+
+            return PartialView("_ProductList", model);
+        }
+
+        public IActionResult Cart()
+        {
+            ViewBag.serializedCart = HttpContext.Session.GetString("Cart");
+            List<SessionCart> sessionCart;
+            int poop = 0;
+            if (HttpContext.Session.GetString("Cart") != null)
+            {
+                sessionCart = JsonConvert.DeserializeObject<List<SessionCart>>(HttpContext.Session.GetString("Cart"));
+                foreach (var item in sessionCart)
+                {
+                    item.Identifier = ++poop;
+                }
+            }
+            else
+            {
+                sessionCart = new List<SessionCart>();
+            }
+
+            return View(sessionCart);
         }
 
         public IActionResult GetProductOrderForm(int id)
@@ -145,6 +222,7 @@ namespace ROCPOP.Client.Controllers
             return Json(model);
         }
 
+
         [HttpPost]
         public IActionResult StoreSessionCart(string cart)
         {
@@ -162,9 +240,20 @@ namespace ROCPOP.Client.Controllers
             return View("_NavCart", sessionCart);
         }
 
-        public IActionResult Checkout()
+        [HttpPost]
+        public IActionResult GetSessionCart()
         {
-            return View();
+            List<SessionCart> sessionCart;
+            if (HttpContext.Session.GetString("Cart") != null)
+            {
+                sessionCart = JsonConvert.DeserializeObject<List<SessionCart>>(HttpContext.Session.GetString("Cart"));              
+            }
+            else
+            {
+                sessionCart = new List<SessionCart>();
+            }
+
+            return Json(sessionCart);
         }
     }
 }

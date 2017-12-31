@@ -1,12 +1,12 @@
-﻿using ROCPOP.Client.Models.DomainModels.Abstract;
+﻿using ROCPOP.Client.Models.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ROCPOP.Client.Models.DomainModels.DTO
+namespace ROCPOP.Client.Models.Repositories.DTO
 {
-    public class ProductDTO: IProductDTO
+    public class ProductDTO: IProduct
     {
         public int Id { get; set; }
         public string Name { get; set; }

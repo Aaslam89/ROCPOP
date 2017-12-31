@@ -1,4 +1,4 @@
-﻿using ROCPOP.Client.Models.DomainModels.Abstract;
+﻿using ROCPOP.Client.Models.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;

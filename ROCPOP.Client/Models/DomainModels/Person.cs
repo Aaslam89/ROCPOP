@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ROCPOP.Client.Models.DomainModels.Abstract
+namespace ROCPOP.Client.Models.DomainModels
 {
     public abstract class Person
     {
